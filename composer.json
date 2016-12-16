@@ -1,0 +1,17 @@
+{
+	"name": "s9e/shortest-common-superstring",
+	"version": "0.0.1-dev",
+	"type": "library",
+	"description": "Shortest common superstring generator"
+	"homepage": "https://github.com/s9e/ShortestCommonSuperstring/",
+	"keywords": ["superstring","supersequence","scs"],
+	"license": "MIT",
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"s9e\\ShortestCommonSuperstring\\": "src"
+		}
+	}
+}
