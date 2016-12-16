@@ -2,7 +2,7 @@
 	"name": "s9e/shortest-common-superstring",
 	"version": "0.0.1-dev",
 	"type": "library",
-	"description": "Shortest common superstring generator"
+	"description": "Shortest common superstring generator",
 	"homepage": "https://github.com/s9e/ShortestCommonSuperstring/",
 	"keywords": ["superstring","supersequence","scs"],
 	"license": "MIT",
@@ -12,6 +12,11 @@
 	"autoload": {
 		"psr-4": {
 			"s9e\\ShortestCommonSuperstring\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"s9e\\ShortestCommonSuperstring\\Tests\\": "tests"
 		}
 	}
 }
