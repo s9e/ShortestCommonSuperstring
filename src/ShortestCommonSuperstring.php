@@ -10,9 +10,24 @@ namespace s9e\ShortestCommonSuperstring;
 class ShortestCommonSuperstring
 {
 	/**
-	* @var string[]
+	* @var integer Affix length for current iteration
+	*/
+	protected $len;
+
+	/**
+	* @var string[] Prefixes of current length
+	*/
+	protected $prefixes;
+
+	/**
+	* @var string[] Strings being merged
 	*/
 	protected $strings;
+
+	/**
+	* @var string[] Suffixes of current length
+	*/
+	protected $suffixes;
 
 	/**
 	* Get the shortest string that contains all given strings
@@ -24,6 +39,18 @@ class ShortestCommonSuperstring
 	{
 		$this->strings = $strings;
 		$this->sortStrings();
+		$this->removeEmptyStrings();
+		$this->removeFullyOverlappingStrings();
+		if (count($this->strings) > 1)
+		{
+			$this->len = strlen($this->strings[0]);
+			while (--$this->len > 0)
+			{
+				$this->mergeStrings();
+			}
+		}
+
+		return implode('', $this->strings);
 	}
 
 	/**
@@ -33,7 +60,7 @@ class ShortestCommonSuperstring
 	* @param  string  $b
 	* @return integer
 	*/
-	protected function compareStrings($a, $b)
+	protected static function compareStrings($a, $b)
 	{
 		$aLen = strlen($a);
 		$bLen = strlen($b);
@@ -48,6 +75,142 @@ class ShortestCommonSuperstring
 	}
 
 	/**
+	* Return the list of keys pointing to strings whose prefix is identical to their suffix
+	*
+	* @return integer[]
+	*/
+	protected function getIdenticalAffixKeys()
+	{
+		$identicalAffixKeys = [];
+		foreach ($this->prefixes as $k => $prefix)
+		{
+			if ($this->suffixes[$k] === $prefix)
+			{
+				$identicalAffixKeys[] = $k;
+			}
+		}
+
+		return $identicalAffixKeys;
+	}
+
+	/**
+	* Match and merge a string by key
+	*
+	* @param  integer $leftKey Left string's key
+	* @return bool             Whether a match was found and strings merged
+	*/
+	protected function mergeString($leftKey)
+	{
+		$suffix = $this->suffixes[$leftKey];
+		foreach ($this->prefixes as $rightKey => $prefix)
+		{
+			if ($prefix === $suffix && $leftKey !== $rightKey)
+			{
+				$this->mergeStringPair($leftKey, $rightKey);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	* Merge two stored strings together at current affix length
+	*
+	* @param  integer $leftKey  Left string's key
+	* @param  integer $rightKey Right string's key
+	* @return void
+	*/
+	protected function mergeStringPair($leftKey, $rightKey)
+	{
+		$this->strings[$leftKey] .= substr($this->strings[$rightKey], $this->len);
+		$this->suffixes[$leftKey] = $this->suffixes[$rightKey];
+		unset($this->prefixes[$rightKey], $this->strings[$rightKey]);
+	}
+
+	/**
+	* Merge all stored strings using current affix length
+	*
+	* @return void
+	*/
+	protected function mergeStrings()
+	{
+		$this->storeAffixes();
+
+		// Merge strings whose prefix is identical to their suffix
+		$keys = $this->getIdenticalAffixKeys();
+		$this->mergeStringsGroup($keys);
+
+		// Merge the remaining strings that have a prefix stored
+		$keys = array_diff(array_keys($this->prefixes), $keys);
+		$this->mergeStringsGroup($keys);
+
+		$this->strings = array_values($this->strings);
+	}
+
+	/**
+	* Match and merge strings from given group
+	*
+	* @param  integer[] $keys List of keys
+	* @return void
+	*/
+	protected function mergeStringsGroup(array $keys)
+	{
+		foreach ($keys as $leftKey)
+		{
+			if (isset($this->strings[$leftKey]))
+			{
+				while ($this->mergeString($leftKey))
+				{
+					// Keep going
+				}
+			}
+		}
+	}
+
+	/**
+	* Remove empty strings from the list
+	*
+	* @return void
+	*/
+	protected function removeEmptyStrings()
+	{
+		foreach ($this->strings as $k => $str)
+		{
+			if ($str === '')
+			{
+				unset($this->strings[$k]);
+			}
+		}
+		$this->strings = array_values($this->strings);
+	}
+
+	/**
+	* Remove fully-overlapping strings from the list
+	*
+	* @return void
+	*/
+	protected function removeFullyOverlappingStrings()
+	{
+		$i = count($this->strings);
+		while (--$i > 0)
+		{
+			$j = $i;
+			while (--$j >= 0)
+			{
+				if (strpos($this->strings[$j], $this->strings[$i]) !== false)
+				{
+					unset($this->strings[$i]);
+					break;
+				}
+			}
+		}
+
+		$this->strings = array_values($this->strings);
+	}
+
+	/**
 	* Sort the stored strings
 	*
 	* @return void
@@ -55,5 +218,27 @@ class ShortestCommonSuperstring
 	protected function sortStrings()
 	{
 		usort($this->strings, [__CLASS__, 'compareStrings']);
+	}
+
+	/**
+	* Capture and stored affixes of current length
+	*
+	* Will only store affixes from strings that are longer than current affix length
+	*
+	* @return void
+	*/
+	protected function storeAffixes()
+	{
+		$this->prefixes = [];
+		$this->suffixes = [];
+		foreach ($this->strings as $str)
+		{
+			if (strlen($str) <= $this->len)
+			{
+				break;
+			}
+			$this->prefixes[] = substr($str, 0, $this->len);
+			$this->suffixes[] = substr($str, -$this->len);
+		}
 	}
 }
