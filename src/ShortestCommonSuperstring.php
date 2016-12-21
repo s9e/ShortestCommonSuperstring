@@ -37,7 +37,7 @@ class ShortestCommonSuperstring
 	*/
 	public function getShortest(array $strings)
 	{
-		$this->strings = $strings;
+		$this->strings = array_unique($strings);
 		$this->sortStrings();
 		$this->removeEmptyStrings();
 		$this->removeFullyOverlappingStrings();
