@@ -176,14 +176,10 @@ class ShortestCommonSuperstring
 	*/
 	protected function removeEmptyStrings()
 	{
-		foreach ($this->strings as $k => $str)
+		if (end($this->strings) === '')
 		{
-			if ($str === '')
-			{
-				unset($this->strings[$k]);
-			}
+			array_pop($this->strings);
 		}
-		$this->resetKeys();
 	}
 
 	/**
