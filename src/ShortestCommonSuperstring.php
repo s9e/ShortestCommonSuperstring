@@ -192,10 +192,11 @@ class ShortestCommonSuperstring
 		$i = count($this->strings);
 		while (--$i > 0)
 		{
+			$str = $this->strings[$i];
 			$j = $i;
 			while (--$j >= 0)
 			{
-				if (strpos($this->strings[$j], $this->strings[$i]) !== false)
+				if (strpos($this->strings[$j], $str) !== false)
 				{
 					unset($this->strings[$i]);
 					break;
