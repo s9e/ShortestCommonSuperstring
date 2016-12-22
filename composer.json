@@ -1,6 +1,6 @@
 {
 	"name": "s9e/shortest-common-superstring",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"type": "library",
 	"description": "Shortest common superstring generator",
 	"homepage": "https://github.com/s9e/ShortestCommonSuperstring/",
