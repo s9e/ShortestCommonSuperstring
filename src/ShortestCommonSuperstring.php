@@ -146,7 +146,7 @@ class ShortestCommonSuperstring
 		$keys = array_diff(array_keys($this->prefixes), $keys);
 		$this->mergeStringsGroup($keys);
 
-		$this->strings = array_values($this->strings);
+		$this->resetKeys();
 	}
 
 	/**
@@ -183,7 +183,7 @@ class ShortestCommonSuperstring
 				unset($this->strings[$k]);
 			}
 		}
-		$this->strings = array_values($this->strings);
+		$this->resetKeys();
 	}
 
 	/**
@@ -207,7 +207,21 @@ class ShortestCommonSuperstring
 			}
 		}
 
-		$this->strings = array_values($this->strings);
+		$this->resetKeys();
+	}
+
+	/**
+	* Reset the keys in the string list to remove the gaps
+	*
+	* @return void
+	*/
+	protected function resetKeys()
+	{
+		end($this->strings);
+		if (key($this->strings) !== count($this->strings) - 1)
+		{
+			$this->strings = array_values($this->strings);
+		}
 	}
 
 	/**
