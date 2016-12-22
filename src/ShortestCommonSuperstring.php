@@ -195,10 +195,13 @@ class ShortestCommonSuperstring
 		{
 			$str = $this->strings[$i];
 			$len = $strlen[$i];
-			$j   = $i;
-			while (--$j >= 0)
+
+			// Iterate over strings starting with the longest. Stop when we reach strings the size
+			// of the current string
+			$j = -1;
+			while ($strlen[++$j] > $len)
 			{
-				if ($strlen[$j] > $len && strpos($this->strings[$j], $str) !== false)
+				if (strpos($this->strings[$j], $str) !== false)
 				{
 					unset($this->strings[$i]);
 					break;
