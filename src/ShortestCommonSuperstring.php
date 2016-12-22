@@ -189,14 +189,16 @@ class ShortestCommonSuperstring
 	*/
 	protected function removeFullyOverlappingStrings()
 	{
-		$i = count($this->strings);
+		$strlen = array_map('strlen', $this->strings);
+		$i      = count($this->strings);
 		while (--$i > 0)
 		{
 			$str = $this->strings[$i];
-			$j = $i;
+			$len = $strlen[$i];
+			$j   = $i;
 			while (--$j >= 0)
 			{
-				if (strpos($this->strings[$j], $str) !== false)
+				if ($strlen[$j] > $len && strpos($this->strings[$j], $str) !== false)
 				{
 					unset($this->strings[$i]);
 					break;
