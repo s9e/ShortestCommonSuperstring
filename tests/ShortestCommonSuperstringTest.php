@@ -77,6 +77,10 @@ class ShortestCommonSuperstringTest extends TestCase
 				'xbbbabbbx'
 			],
 			[
+				['xbbb', 'bbabb', 'bbbx', 'bbbobbb'],
+				'xbbbabbbobbbx'
+			],
+			[
 				['xbbb', 'bbabb', 'bbbx', 'bbxxb'],
 				'xbbbxxbbabb'
 			],
