@@ -2,15 +2,15 @@
 
 /**
 * @package   s9e\ShortestCommonSuperstring
-* @copyright Copyright (c) 2016 The s9e Authors
+* @copyright Copyright (c) 2016-2019 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\ShortestCommonSuperstring\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use s9e\ShortestCommonSuperstring\ShortestCommonSuperstring;
 
-class ShortestCommonSuperstringTest extends PHPUnit_Framework_TestCase
+class ShortestCommonSuperstringTest extends TestCase
 {
 	/**
 	* @dataProvider getTestCases
@@ -23,7 +23,7 @@ class ShortestCommonSuperstringTest extends PHPUnit_Framework_TestCase
 		{
 			if ($string !== '')
 			{
-				$this->assertContains($string, $actual);
+				$this->assertStringContainsString($string, $actual);
 			}
 		}
 		$this->assertEquals($expected, $actual);

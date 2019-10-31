@@ -15,7 +15,7 @@
          stopOnError="false"
          stopOnFailure="false"
          verbose="true">
-    <testsuite>
+    <testsuite name="ShortestCommonSuperstring">
         <directory suffix="Test.php">tests</directory>
     </testsuite>
 
