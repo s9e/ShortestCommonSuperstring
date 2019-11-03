@@ -41,9 +41,11 @@ class ShortestCommonSuperstring
 		$this->sortStrings();
 		$this->removeEmptyStrings();
 		$this->removeFullyOverlappingStrings();
-		if (count($this->strings) > 1)
+		if (isset($this->strings[1]))
 		{
-			$this->len = strlen($this->strings[0]);
+			// Start with the longest partial match possible, which is equal to the length of the
+			// second longest string minus 1
+			$this->len = strlen($this->strings[1]);
 			while (--$this->len > 0)
 			{
 				$this->mergeStrings();
