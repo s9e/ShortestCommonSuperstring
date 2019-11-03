@@ -79,16 +79,7 @@ class ShortestCommonSuperstring
 	*/
 	protected function getIdenticalAffixKeys(): array
 	{
-		$identicalAffixKeys = [];
-		foreach ($this->prefixes as $k => $prefix)
-		{
-			if ($this->suffixes[$k] === $prefix)
-			{
-				$identicalAffixKeys[] = $k;
-			}
-		}
-
-		return $identicalAffixKeys;
+		return array_keys(array_intersect_assoc($this->prefixes, $this->suffixes));
 	}
 
 	/**
