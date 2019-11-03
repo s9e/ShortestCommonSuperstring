@@ -1,4 +1,4 @@
-s9e\ShortestCommonSuperstring takes a list of strings and returns a single string that contains all of the given input.
+s9e\ShortestCommonSuperstring takes a list of strings and returns a single string that contains all of the given input. The implementation uses a greedy approximation algorithm.
 
 [![Build Status](https://api.travis-ci.org/s9e/ShortestCommonSuperstring.svg?branch=master)](https://travis-ci.org/s9e/ShortestCommonSuperstring)
 [![Code Coverage](https://scrutinizer-ci.com/g/s9e/ShortestCommonSuperstring/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/s9e/ShortestCommonSuperstring/?branch=master)
