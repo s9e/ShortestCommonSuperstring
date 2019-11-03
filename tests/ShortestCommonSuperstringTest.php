@@ -73,6 +73,10 @@ class ShortestCommonSuperstringTest extends TestCase
 				'110'
 			],
 			[
+				['foo', 'bar', 'baz', 'x'],
+				'barbazfoox'
+			],
+			[
 				// This test doesn't target any specific code path. It just merges 2048 strings
 				// (1536 unique strings) that are between 1 and 10 characters long. It ensures that
 				// things don't go haywire when we try to merge many strings
