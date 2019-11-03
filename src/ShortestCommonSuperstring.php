@@ -90,18 +90,22 @@ class ShortestCommonSuperstring
 	*/
 	protected function mergeString(int $leftKey): bool
 	{
-		$suffix = $this->suffixes[$leftKey];
-		foreach ($this->prefixes as $rightKey => $prefix)
-		{
-			if ($prefix === $suffix && $leftKey !== $rightKey)
-			{
-				$this->mergeStringPair($leftKey, $rightKey);
+		// Temporarily blank this string's prefix from the array to avoid matches
+		$prefix = $this->prefixes[$leftKey];
+		$this->prefixes[$leftKey] = '';
 
-				return true;
-			}
+		// Search for a prefix that matches this string's suffix before restoring its prefix
+		$rightKey = array_search($this->suffixes[$leftKey], $this->prefixes, true);
+		$this->prefixes[$leftKey] = $prefix;
+
+		if ($rightKey === false)
+		{
+			return false;
 		}
 
-		return false;
+		$this->mergeStringPair($leftKey, $rightKey);
+
+		return true;
 	}
 
 	/**
