@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
 * @package   s9e\ShortestCommonSuperstring
@@ -35,7 +35,7 @@ class ShortestCommonSuperstring
 	* @param  string[] $strings
 	* @return string
 	*/
-	public function getShortest(array $strings)
+	public function getShortest(array $strings): string
 	{
 		$this->strings = array_unique($strings);
 		$this->sortStrings();
@@ -54,13 +54,9 @@ class ShortestCommonSuperstring
 	}
 
 	/**
-	* Compare strings
-	*
-	* @param  string  $a
-	* @param  string  $b
-	* @return integer
+	* Compare given strings
 	*/
-	protected static function compareStrings($a, $b)
+	protected static function compareStrings(string $a, string $b): int
 	{
 		$aLen = strlen($a);
 		$bLen = strlen($b);
@@ -79,7 +75,7 @@ class ShortestCommonSuperstring
 	*
 	* @return integer[]
 	*/
-	protected function getIdenticalAffixKeys()
+	protected function getIdenticalAffixKeys(): array
 	{
 		$identicalAffixKeys = [];
 		foreach ($this->prefixes as $k => $prefix)
@@ -99,7 +95,7 @@ class ShortestCommonSuperstring
 	* @param  integer $leftKey Left string's key
 	* @return bool             Whether a match was found and strings merged
 	*/
-	protected function mergeString($leftKey)
+	protected function mergeString(int $leftKey): bool
 	{
 		$suffix = $this->suffixes[$leftKey];
 		foreach ($this->prefixes as $rightKey => $prefix)
@@ -117,12 +113,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Merge two stored strings together at current affix length
-	*
-	* @param  integer $leftKey  Left string's key
-	* @param  integer $rightKey Right string's key
-	* @return void
 	*/
-	protected function mergeStringPair($leftKey, $rightKey)
+	protected function mergeStringPair(int $leftKey, int $rightKey): void
 	{
 		$this->strings[$leftKey] .= substr($this->strings[$rightKey], $this->len);
 		$this->suffixes[$leftKey] = $this->suffixes[$rightKey];
@@ -131,10 +123,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Merge all stored strings using current affix length
-	*
-	* @return void
 	*/
-	protected function mergeStrings()
+	protected function mergeStrings(): void
 	{
 		$this->storeAffixes();
 
@@ -155,7 +145,7 @@ class ShortestCommonSuperstring
 	* @param  integer[] $keys List of keys
 	* @return void
 	*/
-	protected function mergeStringsGroup(array $keys)
+	protected function mergeStringsGroup(array $keys): void
 	{
 		foreach ($keys as $leftKey)
 		{
@@ -171,10 +161,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Remove empty strings from the list
-	*
-	* @return void
 	*/
-	protected function removeEmptyStrings()
+	protected function removeEmptyStrings(): void
 	{
 		if (end($this->strings) === '')
 		{
@@ -184,10 +172,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Remove fully-overlapping strings from the list
-	*
-	* @return void
 	*/
-	protected function removeFullyOverlappingStrings()
+	protected function removeFullyOverlappingStrings(): void
 	{
 		$strlen = array_map('strlen', $this->strings);
 		$i      = count($this->strings);
@@ -214,10 +200,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Reset the keys in the string list to remove the gaps
-	*
-	* @return void
 	*/
-	protected function resetKeys()
+	protected function resetKeys(): void
 	{
 		end($this->strings);
 		if (key($this->strings) !== count($this->strings) - 1)
@@ -228,10 +212,8 @@ class ShortestCommonSuperstring
 
 	/**
 	* Sort the stored strings
-	*
-	* @return void
 	*/
-	protected function sortStrings()
+	protected function sortStrings(): void
 	{
 		usort($this->strings, [__CLASS__, 'compareStrings']);
 	}
@@ -240,10 +222,8 @@ class ShortestCommonSuperstring
 	* Capture and stored affixes of current length
 	*
 	* Will only store affixes from strings that are longer than current affix length
-	*
-	* @return void
 	*/
-	protected function storeAffixes()
+	protected function storeAffixes(): void
 	{
 		$this->prefixes = [];
 		$this->suffixes = [];
