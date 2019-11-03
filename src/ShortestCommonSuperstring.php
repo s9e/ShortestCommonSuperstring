@@ -111,7 +111,7 @@ class ShortestCommonSuperstring
 	{
 		$this->strings[$leftKey] .= substr($this->strings[$rightKey], $this->len);
 		$this->suffixes[$leftKey] = $this->suffixes[$rightKey];
-		unset($this->prefixes[$rightKey], $this->strings[$rightKey]);
+		unset($this->prefixes[$rightKey], $this->strings[$rightKey], $this->suffixes[$rightKey]);
 	}
 
 	/**
@@ -125,8 +125,8 @@ class ShortestCommonSuperstring
 		$keys = $this->getIdenticalAffixKeys();
 		$this->mergeStringsGroup($keys);
 
-		// Merge the remaining strings that have a prefix stored
-		$keys = array_diff(array_keys($this->prefixes), $keys);
+		// Merge strings that have a suffix that matches a prefix
+		$keys = array_keys(array_intersect($this->suffixes, $this->prefixes));
 		$this->mergeStringsGroup($keys);
 
 		$this->resetKeys();
