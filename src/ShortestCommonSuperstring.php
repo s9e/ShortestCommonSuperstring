@@ -80,9 +80,9 @@ class ShortestCommonSuperstring
 	*/
 	protected function mergeString(int $leftKey): bool
 	{
-		// Temporarily blank this string's prefix from the array to avoid matches
+		// Temporarily remove this string's prefix from the array to avoid matches
 		$prefix = $this->prefixes[$leftKey];
-		$this->prefixes[$leftKey] = '';
+		unset($this->prefixes[$leftKey]);
 
 		// Search for a prefix that matches this string's suffix before restoring its prefix
 		$rightKey = array_search($this->suffixes[$leftKey], $this->prefixes, true);
