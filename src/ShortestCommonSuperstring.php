@@ -73,16 +73,6 @@ class ShortestCommonSuperstring
 	}
 
 	/**
-	* Return the list of keys pointing to strings whose prefix is identical to their suffix
-	*
-	* @return integer[]
-	*/
-	protected function getIdenticalAffixKeys(): array
-	{
-		return array_keys(array_intersect_assoc($this->prefixes, $this->suffixes));
-	}
-
-	/**
 	* Match and merge a string by key
 	*
 	* @param  integer $leftKey Left string's key
@@ -126,7 +116,7 @@ class ShortestCommonSuperstring
 		$this->storeAffixes();
 
 		// Merge strings whose prefix is identical to their suffix
-		$keys = $this->getIdenticalAffixKeys();
+		$keys = array_keys(array_intersect_assoc($this->prefixes, $this->suffixes));
 		$this->mergeStringsGroup($keys);
 
 		// Merge strings that have a suffix that matches a prefix
