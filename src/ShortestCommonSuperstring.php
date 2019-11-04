@@ -172,19 +172,25 @@ class ShortestCommonSuperstring
 	*/
 	protected function removeFullyOverlappingStrings(): void
 	{
-		$strlen = array_map('strlen', $this->strings);
-		$i      = count($this->strings);
-		while (--$i > 0)
+		// Copy the list of strings ordered by ascending length and create a master string by
+		// concatenating them all
+		$strings = array_reverse($this->strings, true);
+		$all     = implode('', $strings);
+		$pos     = 0;
+		foreach ($strings as $i => $str)
 		{
-			$str = $this->strings[$i];
-			$len = $strlen[$i];
-
-			// Iterate over strings starting with the longest. Stop when we reach strings the size
-			// of the current string
-			$j = -1;
-			while ($strlen[++$j] > $len)
+			// Test whether current string potentially appears in any subsequent, bigger strings
+			$pos += strlen($str);
+			if (strpos($all, $str, $pos) === false)
 			{
-				if (strpos($this->strings[$j], $str) !== false)
+				continue;
+			}
+
+			// Iterate over strings from the longest to the one before current string
+			$j = -1;
+			while (++$j < $i)
+			{
+				if (strpos($strings[$j], $str) !== false)
 				{
 					unset($this->strings[$i]);
 					break;
