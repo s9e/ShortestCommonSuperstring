@@ -81,12 +81,18 @@ class ShortestCommonSuperstring
 	protected function mergeString(int $leftKey): bool
 	{
 		// Temporarily remove this string's prefix from the array to avoid matches
-		$prefix = $this->prefixes[$leftKey];
-		unset($this->prefixes[$leftKey]);
+		if (isset($this->prefixes[$leftKey]))
+		{
+			$prefix = $this->prefixes[$leftKey];
+			unset($this->prefixes[$leftKey]);
+		}
 
 		// Search for a prefix that matches this string's suffix before restoring its prefix
 		$rightKey = array_search($this->suffixes[$leftKey], $this->prefixes, true);
-		$this->prefixes[$leftKey] = $prefix;
+		if (isset($prefix))
+		{
+			$this->prefixes[$leftKey] = $prefix;
+		}
 
 		if ($rightKey === false)
 		{
@@ -104,7 +110,14 @@ class ShortestCommonSuperstring
 	protected function mergeStringPair(int $leftKey, int $rightKey): void
 	{
 		$this->strings[$leftKey] .= substr($this->strings[$rightKey], $this->len);
-		$this->suffixes[$leftKey] = $this->suffixes[$rightKey];
+		if (isset($this->suffixes[$rightKey]))
+		{
+			$this->suffixes[$leftKey] = $this->suffixes[$rightKey];
+		}
+		else
+		{
+			unset($this->suffixes[$leftKey]);
+		}
 		unset($this->prefixes[$rightKey], $this->strings[$rightKey], $this->suffixes[$rightKey]);
 	}
 
@@ -113,14 +126,14 @@ class ShortestCommonSuperstring
 	*/
 	protected function mergeStrings(): void
 	{
-		$this->storeAffixes();
+		$this->storeMatchingAffixes();
 
 		// Merge strings whose prefix is identical to their suffix
 		$keys = array_keys(array_intersect_assoc($this->prefixes, $this->suffixes));
 		$this->mergeStringsGroup($keys);
 
-		// Merge strings that have a suffix that matches a prefix
-		$keys = array_keys(array_intersect($this->suffixes, $this->prefixes));
+		// Merge all the strings that can be used on the left side of the concatenation
+		$keys = array_keys($this->suffixes);
 		$this->mergeStringsGroup($keys);
 
 		$this->resetKeys();
@@ -136,12 +149,9 @@ class ShortestCommonSuperstring
 	{
 		foreach ($keys as $leftKey)
 		{
-			if (isset($this->strings[$leftKey]))
+			while (isset($this->suffixes[$leftKey]) && $this->mergeString($leftKey))
 			{
-				while ($this->mergeString($leftKey))
-				{
-					// Keep going
-				}
+				// Keep going as long as the left key has a suffix that matches a prefix
 			}
 		}
 	}
@@ -212,11 +222,12 @@ class ShortestCommonSuperstring
 	}
 
 	/**
-	* Capture and stored affixes of current length
+	* Capture and store matching affixes of current length
 	*
-	* Will only store affixes from strings that are longer than current affix length
+	* Will only store affixes from strings that are longer than current affix length and that have
+	* a match on the other end of a string
 	*/
-	protected function storeAffixes(): void
+	protected function storeMatchingAffixes(): void
 	{
 		$this->prefixes = [];
 		$this->suffixes = [];
@@ -229,5 +240,9 @@ class ShortestCommonSuperstring
 			$this->prefixes[] = substr($str, 0, $this->len);
 			$this->suffixes[] = substr($str, -$this->len);
 		}
+
+		// Only keep affixes with a match on the other end of a string
+		$this->prefixes = array_intersect($this->prefixes, $this->suffixes);
+		$this->suffixes = array_intersect($this->suffixes, $this->prefixes);
 	}
 }
