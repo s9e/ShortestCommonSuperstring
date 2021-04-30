@@ -56,23 +56,6 @@ class ShortestCommonSuperstring
 	}
 
 	/**
-	* Compare given strings
-	*/
-	protected static function compareStrings(string $a, string $b): int
-	{
-		$aLen = strlen($a);
-		$bLen = strlen($b);
-		if ($aLen !== $bLen)
-		{
-			// Longest first
-			return $bLen - $aLen;
-		}
-
-		// Lexical order
-		return ($a > $b) ? 1 : -1;
-	}
-
-	/**
 	* Match and merge a string by key
 	*
 	* @param  integer $leftKey Left string's key
@@ -218,7 +201,11 @@ class ShortestCommonSuperstring
 	*/
 	protected function sortStrings(): void
 	{
-		usort($this->strings, [__CLASS__, 'compareStrings']);
+		// Shortest first, then lexical order
+		usort(
+			$this->strings,
+			fn($a, $b) => (strlen($b) - strlen($a)) ?: ($a <=> $b)
+		);
 	}
 
 	/**
