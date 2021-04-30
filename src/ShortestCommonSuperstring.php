@@ -12,22 +12,22 @@ class ShortestCommonSuperstring
 	/**
 	* @var integer Affix length for current iteration
 	*/
-	protected $len;
+	protected int $len;
 
 	/**
 	* @var string[] Prefixes of current length
 	*/
-	protected $prefixes;
+	protected array $prefixes;
 
 	/**
 	* @var string[] Strings being merged
 	*/
-	protected $strings;
+	protected array $strings;
 
 	/**
 	* @var string[] Suffixes of current length
 	*/
-	protected $suffixes;
+	protected array $suffixes;
 
 	/**
 	* Get the shortest string that contains all given strings
@@ -190,7 +190,7 @@ class ShortestCommonSuperstring
 			$j = -1;
 			while (++$j < $i)
 			{
-				if (strpos($strings[$j], $str) !== false)
+				if (str_contains($strings[$j], $str))
 				{
 					unset($this->strings[$i]);
 					break;
