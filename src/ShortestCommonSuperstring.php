@@ -7,6 +7,8 @@
 */
 namespace s9e\ShortestCommonSuperstring;
 
+use function array_intersect, array_intersect_assoc, array_intersect_key, array_keys, array_pop, array_reverse, array_search, array_unique, array_values, count, end, implode, key, strlen, strpos, substr, usort;
+
 class ShortestCommonSuperstring
 {
 	/**
